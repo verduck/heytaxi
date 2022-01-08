@@ -1,7 +1,6 @@
 package com.moca.heytaxi.service;
 
-import com.moca.heytaxi.config.TwilioProperties;
-import com.twilio.Twilio;
+import com.moca.heytaxi.properties.TwilioProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +12,6 @@ public class TwilioService {
     public TwilioService(TwilioProperties twilioProperties) {
         this.twilioProperties = twilioProperties;
     }
+
+
 }
