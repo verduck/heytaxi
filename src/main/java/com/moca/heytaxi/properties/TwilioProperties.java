@@ -11,14 +11,16 @@ public class TwilioProperties {
     private final String apiSecret;
     private final String verificationServiceSID;
     private final String appHash;
+    private final String clientSecret;
     private final String countryCode;
 
-    public TwilioProperties(String accountSID, String apiKey, String apiSecret, String verificationServiceSID, String appHash, String countryCode) {
+    public TwilioProperties(String accountSID, String apiKey, String apiSecret, String verificationServiceSID, String appHash, String clientSecret, String countryCode) {
         this.accountSID = accountSID;
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.verificationServiceSID = verificationServiceSID;
         this.appHash = appHash;
+        this.clientSecret = clientSecret;
         this.countryCode = countryCode;
     }
 
@@ -40,6 +42,10 @@ public class TwilioProperties {
 
     public String getAppHash() {
         return appHash;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
     }
 
     public String getCountryCode() {
