@@ -18,16 +18,16 @@ public class SMSVerifyService {
         Twilio.init(twilioProperties.getApiKey(), twilioProperties.getApiSecret(), twilioProperties.getAccountSID());
     }
 
-    public String request(SMSVerifyDTO smsVerifyDTO) {
-        Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), smsVerifyDTO.getPhone(), "sms")
+    public String request(SMSVerifyDTO.Request request) {
+        Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), request.getPhone(), "sms")
 /*                .setAppHash(twilioProperties.getAppHash())*/
                 .create();
         return verification.getStatus();
     }
 
-    public String verify(SMSVerifyDTO smsVerifyDTO) {
-        VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), smsVerifyDTO.getMessage())
-                .setTo(smsVerifyDTO.getPhone())
+    public String verify(SMSVerifyDTO.Request request) {
+        VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getMessage())
+                .setTo(request.getPhone())
                 .create();
 
         return verificationCheck.getStatus();

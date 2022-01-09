@@ -17,7 +17,7 @@ public class SMSVerifyController {
     }
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
-    public ResponseEntity<String> request(@RequestBody SMSVerifyDTO request) {
+    public ResponseEntity<String> request(@RequestBody SMSVerifyDTO.Request request) {
         String response;
         if (request == null || request.getPhone() == null) {
             return ResponseEntity.badRequest().body("전화번호를 입력하세요.");
@@ -27,7 +27,7 @@ public class SMSVerifyController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> verify(@RequestBody SMSVerifyDTO request) {
+    public ResponseEntity<String> verify(@RequestBody SMSVerifyDTO.Request request) {
         String response;
         if (request == null) {
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");
