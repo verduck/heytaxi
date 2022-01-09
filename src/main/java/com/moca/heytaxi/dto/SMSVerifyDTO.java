@@ -4,12 +4,12 @@ public class SMSVerifyDTO {
     public static final class Request {
         private String phone;
         private String clientSecret;
-        private String message;
+        private String code;
 
-        public Request(String phone, String clientSecret, String message) {
+        public Request(String phone, String clientSecret, String code) {
             this.phone = phone;
             this.clientSecret = clientSecret;
-            this.message = message;
+            this.code = code;
         }
 
         public String getPhone() {
@@ -28,6 +28,36 @@ public class SMSVerifyDTO {
             this.clientSecret = clientSecret;
         }
 
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
+    public static final class Response {
+        private boolean result;
+        private String message;
+
+        public Response() {
+            this(false, "");
+        }
+
+        public Response(boolean result, String message) {
+            this.result = result;
+            this.message = message;
+        }
+
+        public boolean isResult() {
+            return result;
+        }
+
+        public void setResult(boolean result) {
+            this.result = result;
+        }
+
         public String getMessage() {
             return message;
         }
@@ -35,9 +65,5 @@ public class SMSVerifyDTO {
         public void setMessage(String message) {
             this.message = message;
         }
-    }
-
-    public static final class Response {
-
     }
 }
