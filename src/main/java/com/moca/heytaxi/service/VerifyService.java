@@ -1,6 +1,6 @@
 package com.moca.heytaxi.service;
 
-import com.moca.heytaxi.dto.SMSVerifyDTO;
+import com.moca.heytaxi.dto.VerifyDTO;
 import com.moca.heytaxi.properties.TwilioProperties;
 import com.twilio.Twilio;
 import com.twilio.exception.TwilioException;
@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SMSVerifyService {
+public class VerifyService {
     private final TwilioProperties twilioProperties;
 
     @Autowired
-    public SMSVerifyService(TwilioProperties twilioProperties) {
+    public VerifyService(TwilioProperties twilioProperties) {
         this.twilioProperties = twilioProperties;
         Twilio.init(twilioProperties.getApiKey(), twilioProperties.getApiSecret(), twilioProperties.getAccountSID());
     }
 
-    public SMSVerifyDTO.Response request(SMSVerifyDTO.Request request) {
-        SMSVerifyDTO.Response response = new SMSVerifyDTO.Response();
+    public VerifyDTO.Response request(VerifyDTO.Request request) {
+        VerifyDTO.Response response = new VerifyDTO.Response();
         try {
             Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), request.getPhone(), "sms")
 /*                .setAppHash(twilioProperties.getAppHash())*/
@@ -33,8 +33,8 @@ public class SMSVerifyService {
         return response;
     }
 
-    public SMSVerifyDTO.Response verify(SMSVerifyDTO.Request request) {
-        SMSVerifyDTO.Response response = new SMSVerifyDTO.Response();
+    public VerifyDTO.Response verify(VerifyDTO.Request request) {
+        VerifyDTO.Response response = new VerifyDTO.Response();
         try {
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(request.getPhone())

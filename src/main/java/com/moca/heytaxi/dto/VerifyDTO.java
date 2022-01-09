@@ -1,6 +1,6 @@
 package com.moca.heytaxi.dto;
 
-public class SMSVerifyDTO {
+public class VerifyDTO {
     public static final class Request {
         private String phone;
         private String clientSecret;
