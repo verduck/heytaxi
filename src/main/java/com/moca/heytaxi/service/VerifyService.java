@@ -1,5 +1,8 @@
 package com.moca.heytaxi.service;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.TokenDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
@@ -34,14 +37,19 @@ public class VerifyService {
     public VerifyDTO.Response request(VerifyDTO.Request request) {
         VerifyDTO.Response response = new VerifyDTO.Response();
         try {
-            Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), request.getPhone(), "sms")
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+            Phonenumber.PhoneNumber koreaNumberProto = phoneUtil.parse(request.getPhone(), "KR");
+            String phone = phoneUtil.format(koreaNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
+            Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), phone, "sms")
 /*                .setAppHash(twilioProperties.getAppHash())*/
                     .setLocale("ko")
                     .create();
             response.setSuccess(true);
             response.setMessage(verification.getStatus());
+        } catch (NumberParseException e) {
+            response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
-            response.setMessage(e.getMessage());
+            response.setMessage("잠시 후 다시 시도해 주세요.");
         }
         return response;
     }
@@ -49,6 +57,9 @@ public class VerifyService {
     public TokenDTO verify(VerifyDTO.Request request) {
         TokenDTO response = new TokenDTO();
         try {
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+            Phonenumber.PhoneNumber koreaNumberProto = phoneUtil.parse(request.getPhone(), "KR");
+            String phone = phoneUtil.format(koreaNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(request.getPhone())
                     .create();
@@ -59,8 +70,10 @@ public class VerifyService {
                 response.setSuccess(false);
                 response.setMessage("인증번호가 일치하지 않습니다.");
             }
+        } catch (NumberParseException e) {
+            response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
-            response.setMessage(e.getMessage());
+            response.setMessage("잠시 후 다시 시도해 주세요.");
         }
 
         if (response.isSuccess()) {
