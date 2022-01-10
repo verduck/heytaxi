@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "jwt")
-public class JWTProperties {
+public class JwtProperties {
     private final String secret;
     private final long expiration;
 
-    public JWTProperties(String secret, long expiration) {
+    public JwtProperties(String secret, long expiration) {
         this.secret = secret;
         this.expiration = expiration;
     }
