@@ -38,24 +38,24 @@ public class VerifyDTO {
     }
 
     public static final class Response {
-        private boolean result;
+        private boolean success;
         private String message;
 
         public Response() {
             this(false, null);
         }
 
-        public Response(boolean result, String message) {
-            this.result = result;
+        public Response(boolean success, String message) {
+            this.success = success;
             this.message = message;
         }
 
-        public boolean isResult() {
-            return result;
+        public boolean isSuccess() {
+            return success;
         }
 
-        public void setResult(boolean result) {
-            this.result = result;
+        public void setSuccess(boolean success) {
+            this.success = success;
         }
 
         public String getMessage() {

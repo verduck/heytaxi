@@ -27,7 +27,7 @@ public class VerifyService {
 /*                .setAppHash(twilioProperties.getAppHash())*/
                     .setLocale("ko")
                     .create();
-            response.setResult(true);
+            response.setSuccess(true);
             response.setMessage(verification.getStatus());
         } catch (TwilioException e) {
             response.setMessage(e.getMessage());
@@ -41,8 +41,13 @@ public class VerifyService {
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(request.getPhone())
                     .create();
-            response.setResult(true);
-            response.setMessage(verificationCheck.getStatus());
+            if (verificationCheck.getStatus().equals("approved")) {
+                response.setSuccess(true);
+                response.setMessage("인증이 완료되었습니다.");
+            } else {
+                response.setSuccess(false);
+                response.setMessage("인증번호가 일치하지 않습니다.");
+            }
         } catch (TwilioException e) {
             response.setMessage(e.getMessage());
         }

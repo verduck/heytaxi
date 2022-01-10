@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.sql.Date;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.function.Function;
 
+@Component
 public class JwtProvider {
     private JwtProperties jwtProperties;
     private final Key key;
@@ -54,7 +56,7 @@ public class JwtProvider {
 
     public boolean validateToken(String token, User user) {
         final Long userId = getUserId(token);
-        return (userId == user.getId() && !isExpired(token));
+        return (userId.equals(user.getId()) && !isExpired(token));
     }
 
     private Claims getAllClaims(String token) {

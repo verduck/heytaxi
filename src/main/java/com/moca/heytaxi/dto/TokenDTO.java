@@ -1,7 +1,7 @@
 package com.moca.heytaxi.dto;
 
 public class TokenDTO {
-    private boolean result;
+    private boolean success;
     private String message;
     private String token;
 
@@ -9,18 +9,18 @@ public class TokenDTO {
         this(false, null, null);
     }
 
-    public TokenDTO(boolean result, String message, String token) {
-        this.result = result;
+    public TokenDTO(boolean success, String message, String token) {
+        this.success = success;
         this.message = message;
         this.token = token;
     }
 
-    public boolean isResult() {
-        return result;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setResult(boolean result) {
-        this.result = result;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {
