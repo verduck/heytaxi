@@ -15,19 +15,19 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.function.Function;
 
-public class JwtService {
+public class JwtProvider {
     private JwtProperties jwtProperties;
     private final Key key;
 
     @Autowired
-    public JwtService(JwtProperties jwtProperties) {
+    public JwtProvider(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(User user) {
-        Claims claims = Jwts.claims().setSubject(user.getPhone());
+        Claims claims = Jwts.claims().setSubject(user.getId().toString());
         LocalDate now = LocalDate.now();
 
         return Jwts.builder()
@@ -43,8 +43,8 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String getPhone(String token) {
-        return getClaim(token, Claims::getSubject);
+    public Long getUserId(String token) {
+        return Long.parseLong(getClaim(token, Claims::getSubject));
     }
 
     public boolean isExpired(String token) {
@@ -53,8 +53,8 @@ public class JwtService {
     }
 
     public boolean validateToken(String token, User user) {
-        final String phone = getPhone(token);
-        return (phone.equals(user.getPhone()) && !isExpired(token));
+        final Long userId = getUserId(token);
+        return (userId == user.getId() && !isExpired(token));
     }
 
     private Claims getAllClaims(String token) {
