@@ -1,7 +1,9 @@
 package com.moca.heytaxi.service;
 
 import com.moca.heytaxi.domain.User;
+import com.moca.heytaxi.dto.UserDTO;
 import com.moca.heytaxi.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,4 +41,15 @@ public class UserService implements UserDetailsService {
         return optionalUser.get();
     }
 
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }
