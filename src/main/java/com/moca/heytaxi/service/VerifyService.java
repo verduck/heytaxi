@@ -1,5 +1,6 @@
 package com.moca.heytaxi.service;
 
+import com.moca.heytaxi.dto.TokenDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
 import com.moca.heytaxi.properties.TwilioProperties;
 import com.twilio.Twilio;
@@ -24,6 +25,7 @@ public class VerifyService {
         try {
             Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), request.getPhone(), "sms")
 /*                .setAppHash(twilioProperties.getAppHash())*/
+                    .setLocale("ko")
                     .create();
             response.setResult(true);
             response.setMessage(verification.getStatus());
@@ -33,8 +35,8 @@ public class VerifyService {
         return response;
     }
 
-    public VerifyDTO.Response verify(VerifyDTO.Request request) {
-        VerifyDTO.Response response = new VerifyDTO.Response();
+    public TokenDTO verify(VerifyDTO.Request request) {
+        TokenDTO response = new TokenDTO();
         try {
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(request.getPhone())

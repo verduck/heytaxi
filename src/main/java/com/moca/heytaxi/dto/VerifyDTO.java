@@ -42,7 +42,7 @@ public class VerifyDTO {
         private String message;
 
         public Response() {
-            this(false, "");
+            this(false, null);
         }
 
         public Response(boolean result, String message) {

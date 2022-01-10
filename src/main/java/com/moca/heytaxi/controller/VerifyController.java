@@ -1,5 +1,6 @@
 package com.moca.heytaxi.controller;
 
+import com.moca.heytaxi.dto.TokenDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
 import com.moca.heytaxi.service.VerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class VerifyController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<VerifyDTO.Response> verify(@RequestBody VerifyDTO.Request request) {
-        VerifyDTO.Response response = new VerifyDTO.Response();
+    public ResponseEntity<TokenDTO> verify(@RequestBody VerifyDTO.Request request) {
+        TokenDTO response = new TokenDTO();
         if (request == null) {
             response.setMessage("잘못된 요청입니다.");
             return ResponseEntity.badRequest().body(response);
