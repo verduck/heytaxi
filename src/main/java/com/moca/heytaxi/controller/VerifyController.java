@@ -1,20 +1,29 @@
 package com.moca.heytaxi.controller;
 
+import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.TokenDTO;
+import com.moca.heytaxi.dto.UserDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
+import com.moca.heytaxi.security.JwtProvider;
+import com.moca.heytaxi.service.UserService;
 import com.moca.heytaxi.service.VerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/verify")
 public class VerifyController {
     private VerifyService smsVerifyService;
+    private UserService userService;
+    private JwtProvider jwtProvider;
 
     @Autowired
-    public VerifyController(VerifyService smsVerifyService) {
+    public VerifyController(VerifyService smsVerifyService, UserService userService, JwtProvider jwtProvider) {
         this.smsVerifyService = smsVerifyService;
+        this.userService = userService;
+        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/request")
@@ -45,6 +54,18 @@ public class VerifyController {
             return ResponseEntity.badRequest().body(response);
         }
         // response = smsVerifyService.verify(request);
+        if (response.isSuccess()) {
+            User user;
+            try {
+                user = userService.loadUserByUsername(request.getPhone());
+            } catch (UsernameNotFoundException e) {
+                user = new User();
+                user.setUsername(request.getPhone());
+                user = userService.createUser(user);
+            }
+            String token = jwtProvider.generateToken(user);
+            response.setToken(token);
+        }
         return ResponseEntity.ok(response);
     }
 }
