@@ -16,14 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/verify")
 public class VerifyController {
     private VerifyService smsVerifyService;
-    private UserService userService;
-    private JwtProvider jwtProvider;
 
     @Autowired
-    public VerifyController(VerifyService smsVerifyService, UserService userService, JwtProvider jwtProvider) {
+    public VerifyController(VerifyService smsVerifyService) {
         this.smsVerifyService = smsVerifyService;
-        this.userService = userService;
-        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/request")
@@ -33,7 +29,7 @@ public class VerifyController {
             response.setMessage("전화번호를 입력하세요.");
             return ResponseEntity.badRequest().body(response);
         }
-        // response = smsVerifyService.request(request);
+        response = smsVerifyService.request(request);
         return ResponseEntity.ok(response);
     }
 
@@ -53,19 +49,7 @@ public class VerifyController {
             response.setMessage("인증번호를 입력하세요.");
             return ResponseEntity.badRequest().body(response);
         }
-        // response = smsVerifyService.verify(request);
-        if (response.isSuccess()) {
-            User user;
-            try {
-                user = userService.loadUserByUsername(request.getPhone());
-            } catch (UsernameNotFoundException e) {
-                user = new User();
-                user.setUsername(request.getPhone());
-                user = userService.createUser(user);
-            }
-            String token = jwtProvider.generateToken(user);
-            response.setToken(token);
-        }
+        response = smsVerifyService.verify(request);
         return ResponseEntity.ok(response);
     }
 }

@@ -42,6 +42,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) {
+        user.setName(user.getUsername().substring(user.getUsername().length() - 4));
         return userRepository.save(user);
     }
 
