@@ -37,7 +37,7 @@ public class UserController {
         u.setId(user.getId());
         user = userService.updateUser(u);
         response.setSuccess(true);
-        response.setMessage("사용자 정보를 성공적으로 변경했습니다.");
+        response.setMessage("사용자 정보를 성공적으로 변경하였습니다.");
         response.setUser(modelMapper.map(user, UserDTO.class));
         return ResponseEntity.ok(response);
     }
@@ -47,7 +47,7 @@ public class UserController {
         UserDTO.Response response = new UserDTO.Response();
         userService.deleteUser(user);
         response.setSuccess(true);
-        response.setMessage("사용자 정보를 성공적으로 제거했습니다.");
+        response.setMessage("사용자 정보를 성공적으로 제거하였습니다.");
         return ResponseEntity.ok(response);
     }
 }
