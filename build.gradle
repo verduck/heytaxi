@@ -43,3 +43,7 @@ asciidoctor {
 	inputs.dir snippetsDir
 	dependsOn test
 }
+
+bootJar {
+	mainClass = 'com.moca.heytaxi.HeyTaxiApplication'
+}

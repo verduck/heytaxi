@@ -35,7 +35,7 @@ public class UserDTO {
         private String username;
 
         public Request() {
-            this(null, null, null);
+            this(-1L, null, null);
         }
 
         public Request(Long id, String name, String username) {

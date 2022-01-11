@@ -49,7 +49,7 @@ public class VerifyService {
         } catch (NumberParseException e) {
             response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
-            response.setMessage("잠시 후 다시 시도해 주세요.");
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -61,7 +61,7 @@ public class VerifyService {
             Phonenumber.PhoneNumber koreaNumberProto = phoneUtil.parse(request.getPhone(), "KR");
             String phone = phoneUtil.format(koreaNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
-                    .setTo(request.getPhone())
+                    .setTo(phone)
                     .create();
             if (verificationCheck.getStatus().equals("approved")) {
                 response.setSuccess(true);
@@ -73,7 +73,7 @@ public class VerifyService {
         } catch (NumberParseException e) {
             response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
-            response.setMessage("잠시 후 다시 시도해 주세요.");
+            response.setMessage(e.getMessage());
         }
 
         if (response.isSuccess()) {
