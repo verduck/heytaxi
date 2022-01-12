@@ -33,7 +33,7 @@ public class VerifyController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @PostMapping("/verify")
     public ResponseEntity<TokenDTO> verify(@RequestBody VerifyDTO.Request request) {
         TokenDTO response = new TokenDTO();
         if (request == null) {

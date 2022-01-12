@@ -74,11 +74,11 @@ public class VerifyControllerTest {
         request.setClientSecret("");
         request.setCode("123456");
 
-        this.mockMvc.perform(post("/api/verify")
+        this.mockMvc.perform(post("/api/verify/verify")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
-                .andDo(document("verify",
+                .andDo(document("verify-verify",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         PayloadDocumentation.requestFields(
