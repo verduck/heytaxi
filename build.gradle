@@ -33,6 +33,7 @@ dependencies {
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
 
 test {
@@ -46,5 +47,8 @@ asciidoctor {
 }
 
 bootJar {
-	mainClass = 'com.moca.heytaxi.HeyTaxiApplication'
+	dependsOn asciidoctor
+	from ("${asciidoctor.outputDir}/html5") {
+		into 'static/docs'
+	}
 }

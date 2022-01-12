@@ -1,0 +1,24 @@
+= HeyTaxi With Spring REST Docs
+:toc: left
+
+[[resources-verify]]
+== 인증
+
+[[resources-verify-request]]
+=== 인증 요청
+
+==== HTTP 요청
+include::{snippets}/verify-request/http-request.adoc[]
+
+==== HTTP 응답
+include::{snippets}/verify-request/http-response.adoc[]
+
+[[resources-verify-verify]]
+=== 인증 확인
+
+==== HTTP 요청
+include::{snippets}/verify/http-request.adoc[]
+
+==== HTTP 응답
+include::{snippets}/verify/http-response.adoc[]
+

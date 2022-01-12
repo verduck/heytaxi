@@ -6,6 +6,8 @@ public class VerifyDTO {
         private String clientSecret;
         private String code;
 
+        public Request() {}
+
         public Request(String phone, String clientSecret, String code) {
             this.phone = phone;
             this.clientSecret = clientSecret;
