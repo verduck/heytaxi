@@ -7,14 +7,14 @@ public class Taxi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
     private String name;
     private String carNumber;
 
     public Taxi() {
-        this(-1L, null, null, null);
+        this(null, null, null);
     }
 
     public Taxi(User user, String name, String carNumber) {
@@ -58,5 +58,10 @@ public class Taxi {
 
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Taxi[id=%d, driver=%s, name=%s, carNumber=%s]", id, user.toString(), name, carNumber);
     }
 }

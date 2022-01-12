@@ -76,6 +76,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String toString() {
+        return String.format("User(id=%d, name=%s, username=%s, password=%s, taxiCertification=%s)", id, name, username, password, taxiCertification);
+    }
+
+    @Override
     public boolean isCredentialsNonExpired() {
         return false;
     }
