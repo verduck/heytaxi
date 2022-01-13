@@ -2,9 +2,11 @@ package com.moca.heytaxi.security;
 
 import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,23 +19,30 @@ import java.io.IOException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private JwtProvider jwtProvider;
-    private UserService userService;
+    private final JwtProvider jwtProvider;
+    private final UserService userService;
 
     @Autowired
-    public JwtRequestFilter(JwtProvider jwtProvider, UserService userService) {
+    public JwtRequestFilter(final JwtProvider jwtProvider, final UserService userService) {
         this.jwtProvider = jwtProvider;
         this.userService = userService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, UsernameNotFoundException {
         final String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
             Long userId = jwtProvider.getUserId(token);
             User user = userService.loadUserById(userId);
+
+            if (user == null) {
+                user = new User();
+                user.setId(0L);
+                user.setUsername("01012345678");
+                user.setName("5678");
+            }
 
             if (jwtProvider.validateToken(token, user)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
