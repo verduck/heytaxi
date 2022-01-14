@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.security.config.BeanIds;
@@ -41,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class UserControllerTest {
     private MockMvc mockMvc;
+    private RestDocumentationResultHandler document;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -56,7 +58,10 @@ public class UserControllerTest {
         DelegatingFilterProxy delegateProxyFilter = new DelegatingFilterProxy();
         delegateProxyFilter.init(new MockFilterConfig(webApplicationContext.getServletContext(), BeanIds.SPRING_SECURITY_FILTER_CHAIN));
 
+        document = document("{class-name}/{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .alwaysDo(document)
                 .apply(documentationConfiguration(restDocumentation))
                 .addFilter(delegateProxyFilter)
                 .build();
@@ -65,9 +70,7 @@ public class UserControllerTest {
     @Test
     public void loadMe() throws Exception {
         this.mockMvc.perform(get("/api/user").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
-                .andDo(document("user",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),
@@ -97,9 +100,7 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
-                .andDo(document("put-user",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),
@@ -119,9 +120,7 @@ public class UserControllerTest {
     @Test
     public void deleteMe() throws Exception {
         this.mockMvc.perform(delete("/api/user").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
-                .andDo(document("user",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),

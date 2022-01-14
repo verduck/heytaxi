@@ -4,34 +4,64 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moca.heytaxi.dto.TokenDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
 import com.moca.heytaxi.service.VerifyService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockFilterConfig;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.security.config.BeanIds;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
+
+import javax.servlet.ServletException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest
 public class VerifyControllerTest {
-    @Autowired
     private MockMvc mockMvc;
+    private RestDocumentationResultHandler document;
+
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
     private VerifyService verifyService;
+
+    @BeforeEach
+    public void setUp(WebApplicationContext webApplicationContext,
+                      RestDocumentationContextProvider restDocumentation) throws ServletException {
+
+        DelegatingFilterProxy delegateProxyFilter = new DelegatingFilterProxy();
+        delegateProxyFilter.init(new MockFilterConfig(webApplicationContext.getServletContext(), BeanIds.SPRING_SECURITY_FILTER_CHAIN));
+
+        document = document("{class-name}/{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .alwaysDo(document)
+                .apply(documentationConfiguration(restDocumentation))
+                .addFilter(delegateProxyFilter)
+                .build();
+    }
 
     @Test
     public void request() throws Exception {
@@ -47,9 +77,7 @@ public class VerifyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
-                .andDo(document("verify-request",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document.document(
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("phone").type(JsonFieldType.STRING).description("핸드폰 번호"),
                                 PayloadDocumentation.fieldWithPath("clientSecret").type(JsonFieldType.NULL).description(""),
@@ -78,9 +106,7 @@ public class VerifyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
-                .andDo(document("verify-verify",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document.document(
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("phone").type(JsonFieldType.STRING).description("핸드폰 번호"),
                                 PayloadDocumentation.fieldWithPath("clientSecret").type(JsonFieldType.STRING).description(""),
