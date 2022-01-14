@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,13 +25,15 @@ public class VerifyService {
     private final UserService userService;
     private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public VerifyService(TwilioProperties twilioProperties, UserService userService, JwtProvider jwtProvider, AuthenticationManager authenticationManager) {
+    public VerifyService(TwilioProperties twilioProperties, UserService userService, JwtProvider jwtProvider, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.twilioProperties = twilioProperties;
         this.userService = userService;
         this.jwtProvider = jwtProvider;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
         Twilio.init(twilioProperties.getApiKey(), twilioProperties.getApiSecret(), twilioProperties.getAccountSID());
     }
 
@@ -63,6 +66,7 @@ public class VerifyService {
             VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(phone)
                     .create();
+            System.out.println(verificationCheck.getStatus());
             if (verificationCheck.getStatus().equals("approved")) {
                 response.setSuccess(true);
                 response.setMessage("인증이 완료되었습니다.");
@@ -76,6 +80,7 @@ public class VerifyService {
             response.setMessage(e.getMessage());
         }
 
+
         if (response.isSuccess()) {
             User user;
             try {
@@ -84,8 +89,10 @@ public class VerifyService {
                 );
                 user = userService.loadUserByUsername(request.getPhone());
             } catch (BadCredentialsException e) {
+                System.out.println(e.getMessage());
                 user = new User();
                 user.setUsername(request.getPhone());
+                user.setPassword(passwordEncoder.encode(request.getPhone()));
                 user = userService.createUser(user);
             }
             String token = jwtProvider.generateToken(user);
