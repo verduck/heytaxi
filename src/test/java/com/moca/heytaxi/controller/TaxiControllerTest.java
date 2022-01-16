@@ -69,7 +69,7 @@ public class TaxiControllerTest {
                 .build();
     }
 
-    @Test
+    /*@Test
     public void loadMyTaxi() throws Exception {
         this.mockMvc.perform(get("/api/taxi").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
                 .andDo(document.document(
@@ -80,11 +80,11 @@ public class TaxiControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("taxi").description("택시 정보")
-                                /*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
+                                *//*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
                                 PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver").type(JsonFieldType.OBJECT).description("택시 기사 정보"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver.name").type(JsonFieldType.STRING).description("택시 기사 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*/
+                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*//*
                                 )));
     }
 
@@ -133,11 +133,11 @@ public class TaxiControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("taxi").description("")
-                                /*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
+                                *//*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
                                 PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver").type(JsonFieldType.OBJECT).description("택시 기사 정보"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver.name").type(JsonFieldType.STRING).description("택시 기사 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*/
+                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*//*
                         )));
-    }
+    }*/
 }

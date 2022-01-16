@@ -5,9 +5,7 @@ public class TokenDTO {
     private String message;
     private String token;
 
-    public TokenDTO() {
-        this(false, null, null);
-    }
+    public TokenDTO() { }
 
     public TokenDTO(boolean success, String message, String token) {
         this.success = success;

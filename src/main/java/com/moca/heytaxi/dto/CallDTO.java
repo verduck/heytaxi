@@ -4,6 +4,8 @@ public class CallDTO {
     private LatLng src;
     private LatLng dest;
 
+    public CallDTO() {}
+
     public CallDTO(LatLng src, LatLng dest) {
         this.src = src;
         this.dest = dest;
