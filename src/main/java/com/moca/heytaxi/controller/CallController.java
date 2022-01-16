@@ -30,7 +30,7 @@ public class CallController {
     }
 
     @MessageMapping("/call")
-    public String call(CallDTO request) {
+    public String call(@AuthenticationPrincipal User user, CallDTO request) {
         template.convertAndSend("/topic/message", "hello");
         template.convertAndSend("hello");
         return "hello";
