@@ -30,10 +30,12 @@ public class CallController {
     }
 
     @MessageMapping("/call")
-    public String call(@AuthenticationPrincipal User user, CallDTO request) {
-        template.convertAndSend("/topic/message", "hello");
-        template.convertAndSend("hello");
-        return "hello";
+    public void call(@AuthenticationPrincipal User user, CallDTO request) {
+        Waiting waiting = callService.callTaxi(request);
+        if (waiting != null) {
+            template.convertAndSendToUser(user.getUsername(), "/topic/match-taxi", waiting);
+            template.convertAndSendToUser(waiting.getTaxi().getUser().getUsername(), "/topic/match-user", request);
+        }
     }
 
     @MessageMapping("/wait")
@@ -43,8 +45,8 @@ public class CallController {
             return;
         }
         Waiting waiting = modelMapper.map(request, Waiting.class);
-        waiting.setId(taxi.getId());
+        waiting.setId(taxi.getUser().getUsername());
         waiting = callService.waitCall(waiting);
-        template.convertAndSend("/pub/wait", waiting);
+        template.convertAndSendToUser(user.getUsername(), "/topic/wait", waiting);
     }
 }

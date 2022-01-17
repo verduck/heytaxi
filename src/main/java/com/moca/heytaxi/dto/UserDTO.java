@@ -4,9 +4,7 @@ public class UserDTO {
     private String name;
     private String username;
 
-    public UserDTO() {
-        this(null, null);
-    }
+    public UserDTO() { }
 
     public UserDTO(String name, String username) {
         this.name = name;

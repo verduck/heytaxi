@@ -9,25 +9,25 @@ import java.time.LocalDateTime;
 @RedisHash("waiting")
 public class Waiting {
     @Id
-    private Long id;
+    private String id;
     private Taxi taxi;
     private LatLng location;
     private LocalDateTime timestamp;
 
     public Waiting() {}
 
-    public Waiting(Long id, Taxi taxi, LatLng location, LocalDateTime timestamp) {
+    public Waiting(String id, Taxi taxi, LatLng location, LocalDateTime timestamp) {
         this.id = id;
         this.taxi = taxi;
         this.location = location;
         this.timestamp = timestamp;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
