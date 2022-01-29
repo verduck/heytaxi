@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @RedisHash("waiting")
-public class Waiting {
+public class Waiting implements Comparable<Waiting> {
     @Id
     private String id;
     private Taxi taxi;
@@ -53,5 +53,10 @@ public class Waiting {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public int compareTo(Waiting o) {
+        return timestamp.compareTo(o.timestamp);
     }
 }
