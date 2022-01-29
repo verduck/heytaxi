@@ -26,4 +26,12 @@ public class CallDTO {
     public void setDest(LatLng dest) {
         this.dest = dest;
     }
+
+    public static class Request {
+        
+    }
+
+    public static class Response {
+
+    }
 }
