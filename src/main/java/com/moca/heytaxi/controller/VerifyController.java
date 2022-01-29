@@ -1,21 +1,19 @@
 package com.moca.heytaxi.controller;
 
-import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.TokenDTO;
-import com.moca.heytaxi.dto.UserDTO;
 import com.moca.heytaxi.dto.VerifyDTO;
-import com.moca.heytaxi.security.JwtProvider;
-import com.moca.heytaxi.service.UserService;
 import com.moca.heytaxi.service.VerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/verify")
 public class VerifyController {
-    private VerifyService smsVerifyService;
+    private final VerifyService smsVerifyService;
 
     @Autowired
     public VerifyController(VerifyService smsVerifyService) {

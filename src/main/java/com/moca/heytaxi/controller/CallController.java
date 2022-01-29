@@ -17,10 +17,10 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class CallController {
-    private SimpMessagingTemplate template;
-    private ModelMapper modelMapper;
-    private CallService callService;
-    private TaxiService taxiService;
+    private final SimpMessagingTemplate template;
+    private final ModelMapper modelMapper;
+    private final CallService callService;
+    private final TaxiService taxiService;
 
     @Autowired
     public CallController(SimpMessagingTemplate template, ModelMapper modelMapper, CallService callService, TaxiService taxiService) {

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/taxi")
 public class TaxiController {
-    private ModelMapper modelMapper;
-    private TaxiService taxiService;
+    private final ModelMapper modelMapper;
+    private final TaxiService taxiService;
 
     @Autowired
     public TaxiController(ModelMapper modelMapper, TaxiService taxiService) {
