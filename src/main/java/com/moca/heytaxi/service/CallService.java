@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
 
 @Service
 public class CallService {
-    private WaitingRedisRepository waitingRedisRepository;
+    private final WaitingRedisRepository waitingRedisRepository;
 
     @Autowired
     public CallService(WaitingRedisRepository waitingRedisRepository) {
