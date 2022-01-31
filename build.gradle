@@ -54,7 +54,7 @@ asciidoctor {
 	dependsOn test
 	copy {
 		from "${asciidoctor.outputDir}"
-		into 'doc'
+		into 'docs'
 	}
 }
 
