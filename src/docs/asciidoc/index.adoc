@@ -17,8 +17,8 @@ include::{snippets}/verify-request/http-response.adoc[]
 === 인증 확인
 
 ==== HTTP 요청
-include::{snippets}/verify/http-request.adoc[]
+include::{snippets}/verify-verify/http-request.adoc[]
 
 ==== HTTP 응답
-include::{snippets}/verify/http-response.adoc[]
+include::{snippets}/verify-verify/http-response.adoc[]
 
