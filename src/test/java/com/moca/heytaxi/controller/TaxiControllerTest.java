@@ -2,9 +2,9 @@ package com.moca.heytaxi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moca.heytaxi.domain.Taxi;
+import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.TaxiDTO;
 import com.moca.heytaxi.service.TaxiService;
-import com.twilio.twiml.voice.Pay;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,14 +29,13 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import javax.servlet.ServletException;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -44,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TaxiControllerTest {
     private MockMvc mockMvc;
     private RestDocumentationResultHandler document;
+    private final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.8Bp8eQTOHEl0VZr7i99nT3IXq852Dhzz9yIsm6hCb1o";
 
     @Autowired
     private ModelMapper modelMapper;
@@ -69,9 +69,22 @@ public class TaxiControllerTest {
                 .build();
     }
 
-    /*@Test
+    @Test
     public void loadMyTaxi() throws Exception {
-        this.mockMvc.perform(get("/api/taxi").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
+        final User user = new User();
+        user.setId(1L);
+        user.setName("홍길동");
+        user.setUsername("01012345678");
+
+        final Taxi taxi = new Taxi();
+        taxi.setId(1L);
+        taxi.setName("그랜저");
+        taxi.setCarNumber("123가5678");
+        taxi.setUser(user);
+
+        given(taxiService.loadByUserId(any())).willReturn(taxi);
+
+        this.mockMvc.perform(get("/api/taxi").header("Authorization", "Bearer " + TOKEN)).andExpect(status().isOk())
                 .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
@@ -79,27 +92,26 @@ public class TaxiControllerTest {
                         PayloadDocumentation.responseFields(
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
-                                PayloadDocumentation.fieldWithPath("taxi").description("택시 정보")
-                                *//*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
+                                PayloadDocumentation.fieldWithPath("taxi").description("택시 정보"),
+                                PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
                                 PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver").type(JsonFieldType.OBJECT).description("택시 기사 정보"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver.name").type(JsonFieldType.STRING).description("택시 기사 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*//*
+                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")
                                 )));
     }
 
     @Test
     public void registerMyTaxi() throws Exception {
-        Taxi taxi = new Taxi();
+        final Taxi taxi = new Taxi();
         taxi.setName("그랜저");
         taxi.setCarNumber("123가4567");
 
-        when(taxiService.createTaxi(any(Taxi.class))).thenReturn(taxi);
-
+        given(taxiService.createTaxi(any(Taxi.class))).willReturn(taxi);
         TaxiDTO.Request request = modelMapper.map(taxi, TaxiDTO.Request.class);
 
         this.mockMvc.perform(post("/api/taxi")
-                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")
+                .header("Authorization", "Bearer " + TOKEN)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
@@ -124,7 +136,7 @@ public class TaxiControllerTest {
 
     @Test
     public void deleteMyTaxi() throws Exception {
-        this.mockMvc.perform(delete("/api/taxi").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
+        this.mockMvc.perform(delete("/api/taxi").header("Authorization", "Bearer " + TOKEN)).andExpect(status().isOk())
                 .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
@@ -133,11 +145,6 @@ public class TaxiControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("taxi").description("")
-                                *//*PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver").type(JsonFieldType.OBJECT).description("택시 기사 정보"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver.name").type(JsonFieldType.STRING).description("택시 기사 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")*//*
                         )));
-    }*/
+    }
 }

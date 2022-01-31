@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.UserDTO;
 import com.moca.heytaxi.service.UserService;
+import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.security.config.BeanIds;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,6 +30,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import javax.servlet.ServletException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -43,11 +46,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private MockMvc mockMvc;
     private RestDocumentationResultHandler document;
+    private final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.8Bp8eQTOHEl0VZr7i99nT3IXq852Dhzz9yIsm6hCb1o";
 
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @MockBean
     private UserService userService;
 
@@ -69,7 +75,15 @@ public class UserControllerTest {
 
     @Test
     public void loadMe() throws Exception {
-        this.mockMvc.perform(get("/api/user").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
+        final User user = new User();
+        user.setId(1L);
+        user.setName("홍길동");
+        user.setUsername("01012345678");
+        user.setPassword(passwordEncoder.encode("01012345678"));
+
+        given(userService.loadUserById(any(Long.class))).willReturn(user);
+
+        this.mockMvc.perform(get("/api/user").header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN)).andExpect(status().isOk())
                 .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")
@@ -84,19 +98,21 @@ public class UserControllerTest {
 
     @Test
     public void putMe() throws Exception {
-        User user = new User();
-        user.setId(0L);
-        user.setUsername("01012345678");
+        final User user = new User();
+        user.setId(1L);
         user.setName("홍길동");
+        user.setUsername("01012345678");
+        user.setPassword(passwordEncoder.encode("01012345678"));
 
         UserDTO.Request request = new UserDTO.Request();
         request.setUsername("01012345678");
         request.setName("홍길동");
 
-        when(userService.updateUser(any(User.class))).thenReturn(user);
+        given(userService.loadUserById(any(Long.class))).willReturn(user);
+        given(userService.updateUser(any(User.class))).willReturn(user);
 
         this.mockMvc.perform(put("/api/user")
-            .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
@@ -119,7 +135,15 @@ public class UserControllerTest {
 
     @Test
     public void deleteMe() throws Exception {
-        this.mockMvc.perform(delete("/api/user").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiaWF0IjoxNjQxNzQwNDAwLCJleHAiOjE1NDkyNDA5NjAwfQ.UNSrayKVbrOzpjgavJD1en0nxA_GOj_JYatzL6O25e0")).andExpect(status().isOk())
+        final User user = new User();
+        user.setId(1L);
+        user.setName("홍길동");
+        user.setUsername("01012345678");
+        user.setPassword(passwordEncoder.encode("01012345678"));
+
+        given(userService.loadUserById(any(Long.class))).willReturn(user);
+
+        this.mockMvc.perform(delete("/api/user").header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN)).andExpect(status().isOk())
                 .andDo(document.document(
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer auth credentials")

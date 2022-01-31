@@ -29,6 +29,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import javax.servlet.ServletException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -68,7 +69,7 @@ public class VerifyControllerTest {
         VerifyDTO.Response response = new VerifyDTO.Response();
         response.setSuccess(true);
         response.setMessage("pending");
-        when(verifyService.request(any(VerifyDTO.Request.class))).thenReturn(response);
+        given(verifyService.request(any(VerifyDTO.Request.class))).willReturn(response);
 
         VerifyDTO.Request request = new VerifyDTO.Request();
         request.setPhone("01012345678");
@@ -95,7 +96,7 @@ public class VerifyControllerTest {
         response.setSuccess(true);
         response.setMessage("approved");
         response.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2Mzh9.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI");
-        when(verifyService.verify(any(VerifyDTO.Request.class))).thenReturn(response);
+        given(verifyService.verify(any(VerifyDTO.Request.class))).willReturn(response);
 
         VerifyDTO.Request request = new VerifyDTO.Request();
         request.setPhone("01012345678");
