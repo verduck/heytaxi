@@ -9,25 +9,24 @@ import java.time.LocalDateTime;
 @RedisHash("waiting")
 public class Waiting implements Comparable<Waiting> {
     @Id
-    private String id;
+    private Long id;
     private Taxi taxi;
     private LatLng location;
     private LocalDateTime timestamp;
 
     public Waiting() {}
 
-    public Waiting(String id, Taxi taxi, LatLng location, LocalDateTime timestamp) {
-        this.id = id;
+    public Waiting(Taxi taxi, LatLng location, LocalDateTime timestamp) {
         this.taxi = taxi;
         this.location = location;
         this.timestamp = timestamp;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

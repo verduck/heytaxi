@@ -20,14 +20,12 @@ public class CallController {
     private final SimpMessagingTemplate template;
     private final ModelMapper modelMapper;
     private final CallService callService;
-    private final TaxiService taxiService;
 
     @Autowired
-    public CallController(SimpMessagingTemplate template, ModelMapper modelMapper, CallService callService, TaxiService taxiService) {
+    public CallController(SimpMessagingTemplate template, ModelMapper modelMapper, CallService callService) {
         this.template = template;
         this.modelMapper = modelMapper;
         this.callService = callService;
-        this.taxiService = taxiService;
     }
 
     @MessageMapping("/call")
@@ -45,22 +43,5 @@ public class CallController {
             response.setSuccess(false);
             response.setMessage("택시를 호출하지 못했습니다. 잠시 후 다시 시도해 주세요.");
         }
-    }
-
-    @MessageMapping("/wait")
-    public void waitCall(@AuthenticationPrincipal User user, WaitingDTO.Request request) {
-        Taxi taxi = taxiService.loadByUserId(user.getId());
-        if (taxi == null) {
-            return;
-        }
-        Waiting waiting = modelMapper.map(request, Waiting.class);
-        waiting.setId(taxi.getUser().getUsername());
-        waiting = callService.waitCall(waiting);
-        template.convertAndSendToUser(user.getUsername(), "/topic/wait", modelMapper.map(waiting, WaitingDTO.class));
-    }
-
-    @MessageMapping("/update")
-    public void updateTaxi(@AuthenticationPrincipal User user) {
-
     }
 }
