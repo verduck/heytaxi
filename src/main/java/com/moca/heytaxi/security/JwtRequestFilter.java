@@ -2,7 +2,6 @@ package com.moca.heytaxi.security;
 
 import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.service.UserService;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,13 +35,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
             Long userId = jwtProvider.getUserId(token);
             User user = userService.loadUserById(userId);
-
-            if (user == null) {
-                user = new User();
-                user.setId(0L);
-                user.setUsername("01012345678");
-                user.setName("5678");
-            }
 
             if (jwtProvider.validateToken(token, user)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

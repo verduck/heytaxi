@@ -1,0 +1,104 @@
+= HeyTaxi With Spring REST Docs
+:toc: left
+
+[[resources-verify]]
+== 인증
+
+[[resources-verify-request]]
+=== 인증 요청
+
+==== HTTP 요청
+include::{snippets}/verify-controller-test/request/http-request.adoc[]
+
+===== 요청 필드
+include::{snippets}/verify-controller-test/request/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/verify-controller-test/request/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/verify-controller-test/request/response-fields.adoc[]
+
+[[resources-verify-verify]]
+=== 인증 확인
+
+==== HTTP 요청
+include::{snippets}/verify-controller-test/verify/http-request.adoc[]
+
+===== 요청 필드
+include::{snippets}/verify-controller-test/verify/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/verify-controller-test/verify/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/verify-controller-test/request/response-fields.adoc[]
+
+[[resources-user]]
+== 사용자
+
+[[resource-load-me]]
+=== 내 정보
+
+==== HTTP 요청
+include::{snippets}/user-controller-test/load-me/http-request.adoc[]
+
+===== 요청 헤더
+include::{snippets}/user-controller-test/load-me/request-headers.adoc[]
+
+==== HTTP 응답
+include::{snippets}/user-controller-test/load-me/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/user-controller-test/load-me/response-fields.adoc[]
+
+[[resource-put-me]]
+=== 내 정보 수정
+
+==== HTTP 요청
+include::{snippets}/user-controller-test/put-me/http-request.adoc[]
+
+===== 요청 헤더
+include::{snippets}/user-controller-test/put-me/request-headers.adoc[]
+
+==== HTTP 응답
+include::{snippets}/user-controller-test/put-me/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/user-controller-test/put-me/response-fields.adoc[]
+
+[[resources-taxi]]
+== 택시
+
+[[resource-put-my-taxi]]
+=== 내 택시 등록
+
+==== HTTP 요청
+include::{snippets}/taxi-controller-test/register-my-taxi/http-request.adoc[]
+
+===== 요청 헤더
+include::{snippets}/taxi-controller-test/register-my-taxi/request-headers.adoc[]
+
+===== 요청 필드
+include::{snippets}/taxi-controller-test/register-my-taxi/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/taxi-controller-test/register-my-taxi/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/taxi-controller-test/register-my-taxi/response-fields.adoc[]
+
+[[resource-load-my-taxi]]
+=== 내 택시 정보
+
+==== HTTP 요청
+include::{snippets}/taxi-controller-test/load-my-taxi/http-request.adoc[]
+
+===== 요청 헤더
+include::{snippets}/taxi-controller-test/load-my-taxi/request-headers.adoc[]
+
+==== HTTP 응답
+include::{snippets}/taxi-controller-test/load-my-taxi/http-response.adoc[]
+
+===== 응답 필드
+include::{snippets}/taxi-controller-test/load-my-taxi/response-fields.adoc[]
