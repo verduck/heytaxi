@@ -6,18 +6,16 @@ import org.springframework.data.redis.core.RedisHash;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@RedisHash("waiting")
-public class Waiting implements Comparable<Waiting> {
+@RedisHash("empty")
+public class Empty implements Comparable<Empty> {
     @Id
     private Long id;
-    private Taxi taxi;
     private LatLng location;
     private LocalDateTime timestamp;
 
-    public Waiting() {}
+    public Empty() {}
 
-    public Waiting(Taxi taxi, LatLng location, LocalDateTime timestamp) {
-        this.taxi = taxi;
+    public Empty(LatLng location, LocalDateTime timestamp) {
         this.location = location;
         this.timestamp = timestamp;
     }
@@ -28,14 +26,6 @@ public class Waiting implements Comparable<Waiting> {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Taxi getTaxi() {
-        return taxi;
-    }
-
-    public void setTaxi(Taxi taxi) {
-        this.taxi = taxi;
     }
 
     public LatLng getLocation() {
@@ -55,7 +45,7 @@ public class Waiting implements Comparable<Waiting> {
     }
 
     @Override
-    public int compareTo(Waiting o) {
+    public int compareTo(Empty o) {
         return timestamp.compareTo(o.timestamp);
     }
 }

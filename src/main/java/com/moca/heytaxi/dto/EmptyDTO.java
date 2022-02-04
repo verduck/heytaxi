@@ -2,14 +2,14 @@ package com.moca.heytaxi.dto;
 
 import java.time.LocalDateTime;
 
-public class WaitingDTO {
+public class EmptyDTO {
     private TaxiDTO taxi;
     private LatLng location;
     private LocalDateTime timestamp;
 
-    public WaitingDTO() {}
+    public EmptyDTO() {}
 
-    public WaitingDTO(TaxiDTO taxi, LatLng location, LocalDateTime timestamp) {
+    public EmptyDTO(TaxiDTO taxi, LatLng location, LocalDateTime timestamp) {
         this.taxi = taxi;
         this.location = location;
         this.timestamp = timestamp;
@@ -71,11 +71,11 @@ public class WaitingDTO {
     public static class Response {
         private boolean success;
         private String message;
-        private WaitingDTO waiting;
+        private EmptyDTO waiting;
 
         public Response() {}
 
-        public Response(boolean success, String message, WaitingDTO waiting) {
+        public Response(boolean success, String message, EmptyDTO waiting) {
             this.success = success;
             this.message = message;
             this.waiting = waiting;
@@ -97,11 +97,11 @@ public class WaitingDTO {
             this.message = message;
         }
 
-        public WaitingDTO getWaiting() {
+        public EmptyDTO getWaiting() {
             return waiting;
         }
 
-        public void setWaiting(WaitingDTO waiting) {
+        public void setWaiting(EmptyDTO waiting) {
             this.waiting = waiting;
         }
     }

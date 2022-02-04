@@ -6,7 +6,7 @@ import org.springframework.data.redis.core.RedisHash;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@RedisHash("Call")
+@RedisHash("call")
 public class Call {
     @Id
     private Long id;

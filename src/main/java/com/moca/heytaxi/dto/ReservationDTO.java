@@ -1,12 +1,12 @@
 package com.moca.heytaxi.dto;
 
-public class MatchingDTO {
+public class ReservationDTO {
     private CallDTO user;
-    private WaitingDTO taxi;
+    private EmptyDTO taxi;
 
-    public MatchingDTO() {}
+    public ReservationDTO() {}
 
-    public MatchingDTO(CallDTO user, WaitingDTO taxi) {
+    public ReservationDTO(CallDTO user, EmptyDTO taxi) {
         this.user = user;
         this.taxi = taxi;
     }
@@ -19,22 +19,22 @@ public class MatchingDTO {
         this.user = user;
     }
 
-    public WaitingDTO getTaxi() {
+    public EmptyDTO getTaxi() {
         return taxi;
     }
 
-    public void setTaxi(WaitingDTO taxi) {
+    public void setTaxi(EmptyDTO taxi) {
         this.taxi = taxi;
     }
 
     public static class Response {
         private boolean success;
         private String message;
-        private MatchingDTO matching;
+        private ReservationDTO matching;
 
         public Response() {}
 
-        public Response(boolean success, String message, MatchingDTO matching) {
+        public Response(boolean success, String message, ReservationDTO matching) {
             this.success = success;
             this.message = message;
             this.matching = matching;
@@ -56,11 +56,11 @@ public class MatchingDTO {
             this.message = message;
         }
 
-        public MatchingDTO getMatching() {
+        public ReservationDTO getMatching() {
             return matching;
         }
 
-        public void setMatching(MatchingDTO matching) {
+        public void setMatching(ReservationDTO matching) {
             this.matching = matching;
         }
     }
