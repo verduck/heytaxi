@@ -1,7 +1,9 @@
 package com.moca.heytaxi.service;
 
+import com.moca.heytaxi.domain.Call;
 import com.moca.heytaxi.domain.Waiting;
 import com.moca.heytaxi.dto.CallDTO;
+import com.moca.heytaxi.repository.CallRedisRepository;
 import com.moca.heytaxi.repository.WaitingRedisRepository;
 import com.moca.heytaxi.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,17 @@ import java.util.PriorityQueue;
 
 @Service
 public class CallService {
+    private final CallRedisRepository callRedisRepository;
     private final WaitingRedisRepository waitingRedisRepository;
 
     @Autowired
-    public CallService(WaitingRedisRepository waitingRedisRepository) {
+    public CallService(CallRedisRepository callRedisRepository, WaitingRedisRepository waitingRedisRepository) {
+        this.callRedisRepository = callRedisRepository;
         this.waitingRedisRepository = waitingRedisRepository;
+    }
+
+    public void enqueue(Call call) {
+        callRedisRepository.save(call);
     }
 
     public Waiting callTaxi(CallDTO call) {
@@ -31,10 +39,5 @@ public class CallService {
             }
         }
         return null;
-    }
-
-    public Waiting waitCall(Waiting waiting) {
-        waitingRedisRepository.save(waiting);
-        return waiting;
     }
 }

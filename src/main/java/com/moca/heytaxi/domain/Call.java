@@ -4,6 +4,7 @@ import com.moca.heytaxi.dto.LatLng;
 import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @RedisHash("Call")
 public class Call {
@@ -11,12 +12,14 @@ public class Call {
     private Long id;
     private LatLng src;
     private LatLng dst;
+    private LocalDateTime timestamp;
 
     public Call() {}
 
-    public Call(LatLng src, LatLng dst) {
+    public Call(LatLng src, LatLng dst, LocalDateTime timestamp) {
         this.src = src;
         this.dst = dst;
+        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -41,5 +44,13 @@ public class Call {
 
     public void setDst(LatLng dst) {
         this.dst = dst;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

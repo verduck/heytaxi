@@ -2,9 +2,7 @@ package com.moca.heytaxi.service;
 
 import com.moca.heytaxi.domain.Waiting;
 import com.moca.heytaxi.dto.LatLng;
-import com.moca.heytaxi.dto.WaitingDTO;
 import com.moca.heytaxi.repository.WaitingRedisRepository;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @Service
