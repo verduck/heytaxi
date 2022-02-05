@@ -1,12 +1,10 @@
 package com.moca.heytaxi.controller;
 
-import com.moca.heytaxi.domain.Taxi;
-import com.moca.heytaxi.domain.User;
-import com.moca.heytaxi.domain.Empty;
-import com.moca.heytaxi.dto.ErrorDTO;
-import com.moca.heytaxi.dto.EmptyDTO;
+import com.moca.heytaxi.domain.*;
+import com.moca.heytaxi.dto.*;
+import com.moca.heytaxi.service.CallService;
+import com.moca.heytaxi.service.ReservationService;
 import com.moca.heytaxi.service.TaxiService;
-import com.moca.heytaxi.service.WaitingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,14 +19,16 @@ public class EmptyController {
     private final SimpMessagingTemplate template;
     private final ModelMapper modelMapper;
     private final TaxiService taxiService;
-    private final WaitingService waitingService;
+    private final CallService callService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public EmptyController(SimpMessagingTemplate template, ModelMapper modelMapper, TaxiService taxiService, WaitingService waitingService) {
+    public EmptyController(SimpMessagingTemplate template, ModelMapper modelMapper, TaxiService taxiService, CallService callService, ReservationService reservationService) {
         this.template = template;
         this.modelMapper = modelMapper;
         this.taxiService = taxiService;
-        this.waitingService = waitingService;
+        this.callService = callService;
+        this.reservationService = reservationService;
     }
 
     @MessageMapping
@@ -42,13 +42,18 @@ public class EmptyController {
         Empty empty = modelMapper.map(request, Empty.class);
         empty.setId(taxi.getUser().getId());
         empty.setTimestamp(LocalDateTime.now());
-        empty = waitingService.wait(empty);
+        callService.enqueueEmpty(empty);
     }
 
     @MessageMapping("/update")
     public void updateLocation(@AuthenticationPrincipal User user, EmptyDTO.Request request) {
         try {
-            waitingService.updateLocationById(user.getId(), request.getLocation());
+            Empty empty = callService.updateEmptyLocationById(user.getId(), request.getLocation());
+            Call call = callService.tryReservation(empty);
+            if (call != null) {
+                ReservationDTO reservation = modelMapper.map(reservationService.create(empty, call), ReservationDTO.class);
+                template.convertAndSendToUser(reservation.getUser().getUsername(), "/topic/reservation", reservation);
+            }
         } catch (Exception e) {
             ErrorDTO error = new ErrorDTO(e.getMessage());
             template.convertAndSendToUser(user.getUsername(), "/topic/error", error);
