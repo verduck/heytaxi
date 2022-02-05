@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @RedisHash("call")
-public class Call {
+public class Call implements Comparable<Call> {
     @Id
     private Long id;
     private LatLng src;
@@ -52,5 +52,10 @@ public class Call {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public int compareTo(Call o) {
+        return timestamp.compareTo(o.timestamp);
     }
 }
