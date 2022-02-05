@@ -1,21 +1,23 @@
 package com.moca.heytaxi.dto;
 
 public class ReservationDTO {
-    private CallDTO user;
+    private UserDTO user;
     private EmptyDTO taxi;
+    private CallDTO call;
 
     public ReservationDTO() {}
 
-    public ReservationDTO(CallDTO user, EmptyDTO taxi) {
+    public ReservationDTO(UserDTO user, EmptyDTO taxi, CallDTO call) {
         this.user = user;
         this.taxi = taxi;
+        this.call = call;
     }
 
-    public CallDTO getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(CallDTO user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
@@ -25,6 +27,14 @@ public class ReservationDTO {
 
     public void setTaxi(EmptyDTO taxi) {
         this.taxi = taxi;
+    }
+
+    public CallDTO getCall() {
+        return call;
+    }
+
+    public void setCall(CallDTO call) {
+        this.call = call;
     }
 
     public static class Response {
