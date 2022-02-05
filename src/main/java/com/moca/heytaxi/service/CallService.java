@@ -2,7 +2,6 @@ package com.moca.heytaxi.service;
 
 import com.moca.heytaxi.domain.Call;
 import com.moca.heytaxi.domain.Empty;
-import com.moca.heytaxi.dto.CallDTO;
 import com.moca.heytaxi.dto.LatLng;
 import com.moca.heytaxi.repository.CallRedisRepository;
 import com.moca.heytaxi.repository.EmptyRedisRepository;
@@ -44,15 +43,15 @@ public class CallService {
         return callRedisRepository.findById(id).orElseThrow(() -> new Exception("콜을 요청하지 않았습니다."));
     }
 
-    public Empty callTaxi(CallDTO call) {
-        PriorityQueue<Empty> empties = new PriorityQueue<>();
-        emptyRedisRepository.findAll().forEach(empties::add);
-        Iterator<Empty> it = empties.iterator();
+    public Call tryReservation(Empty empty) {
+        PriorityQueue<Call> calls = new PriorityQueue<>();
+        callRedisRepository.findAll().forEach(calls::add);
+        Iterator<Call> it = calls.iterator();
         while (it.hasNext()) {
-            Empty empty = it.next();
-            double dist = Utils.distance(call.getSrc(), empty.getLocation(), "meter");
-            if (dist < 500.0) {
-                return empty;
+            Call call = it.next();
+            double dist = Utils.distance(call.getSrc(), empty.getLocation(), "kilometer");
+            if (dist <= 1.0) {
+                return call;
             }
         }
         return null;
