@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 public class Empty implements Comparable<Empty> {
     @Id
     private Long id;
+    private Taxi taxi;
     private LatLng location;
     private LocalDateTime timestamp;
 
     public Empty() {}
 
-    public Empty(LatLng location, LocalDateTime timestamp) {
+    public Empty(Taxi taxi, LatLng location, LocalDateTime timestamp) {
+        this.taxi = taxi;
         this.location = location;
         this.timestamp = timestamp;
     }
@@ -47,5 +49,13 @@ public class Empty implements Comparable<Empty> {
     @Override
     public int compareTo(Empty o) {
         return timestamp.compareTo(o.timestamp);
+    }
+
+    public Taxi getTaxi() {
+        return taxi;
+    }
+
+    public void setTaxi(Taxi taxi) {
+        this.taxi = taxi;
     }
 }
