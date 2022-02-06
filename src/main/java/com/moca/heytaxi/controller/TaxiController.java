@@ -2,6 +2,7 @@ package com.moca.heytaxi.controller;
 
 import com.moca.heytaxi.domain.Taxi;
 import com.moca.heytaxi.domain.User;
+import com.moca.heytaxi.dto.ErrorDTO;
 import com.moca.heytaxi.dto.TaxiDTO;
 import com.moca.heytaxi.service.TaxiService;
 import org.modelmapper.ModelMapper;
@@ -25,13 +26,13 @@ public class TaxiController {
     @GetMapping
     public ResponseEntity<TaxiDTO.Response> loadMyTaxi(@AuthenticationPrincipal User user) {
         TaxiDTO.Response response = new TaxiDTO.Response();
-        Taxi taxi = taxiService.loadByUserId(user.getId());
-        if (taxi == null) {
-            response.setMessage("등록된 택시 정보가 존재하지 않습니다.");
-        } else {
-            response.setSuccess(true);
+        try {
+            Taxi taxi = taxiService.loadByUserId(user.getId());
             response.setMessage("택시 정보를 성공적으로 불러왔습니다.");
             response.setTaxi(modelMapper.map(taxi, TaxiDTO.class));
+        } catch (Exception e) {
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }

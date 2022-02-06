@@ -16,12 +16,8 @@ public class TaxiService {
         this.taxiRepository = taxiRepository;
     }
 
-    public Taxi loadByUserId(Long userId) {
-        Optional<Taxi> optionalTaxi = taxiRepository.findByUserId(userId);
-        if (optionalTaxi.isEmpty()) {
-            return null;
-        }
-        return optionalTaxi.get();
+    public Taxi loadByUserId(Long userId) throws Exception{
+        return taxiRepository.findByUserId(userId).orElseThrow(() -> new Exception("등록된 택시가 없습니다."));
     }
 
     public Taxi createTaxi(Taxi taxi) {
