@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
-@Controller("/call")
+@Controller
 public class CallController {
     private final SimpMessagingTemplate template;
     private final ModelMapper modelMapper;
@@ -27,7 +27,7 @@ public class CallController {
         this.callService = callService;
     }
 
-    @MessageMapping("/request")
+    @MessageMapping("/call/request")
     public void request(@AuthenticationPrincipal User user, CallDTO request) {
         Call call = modelMapper.map(request, Call.class);
         call.setId(user.getId());
@@ -35,7 +35,7 @@ public class CallController {
         callService.enqueueCall(call);
     }
 
-    @MessageMapping("/cancel")
+    @MessageMapping("/call/cancel")
     public void cancel(@AuthenticationPrincipal User user) {
         try {
             Call call = callService.loadCallById(user.getId());

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
-@Controller("/empty")
+@Controller
 public class EmptyController {
     private final SimpMessagingTemplate template;
     private final ModelMapper modelMapper;
@@ -31,7 +31,7 @@ public class EmptyController {
         this.reservationService = reservationService;
     }
 
-    @MessageMapping("/update")
+    @MessageMapping("/empty/update")
     public void updateLocation(@AuthenticationPrincipal User user, EmptyDTO.Request request) {
         try {
             Taxi taxi = taxiService.loadByUserId(user.getId());
