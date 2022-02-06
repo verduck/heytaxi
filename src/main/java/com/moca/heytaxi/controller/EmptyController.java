@@ -31,29 +31,18 @@ public class EmptyController {
         this.reservationService = reservationService;
     }
 
-    @MessageMapping
-    public void empty(@AuthenticationPrincipal User user, EmptyDTO.Request request) {
-        Taxi taxi = taxiService.loadByUserId(user.getId());
-        if (taxi == null) {
-            ErrorDTO error = new ErrorDTO("등록된 택시가 없습니다.");
-            template.convertAndSendToUser(user.getUsername(), "/topic/error", error);
-            return;
-        }
-        Empty empty = modelMapper.map(request, Empty.class);
-        empty.setId(taxi.getUser().getId());
-        empty.setTimestamp(LocalDateTime.now());
-        callService.enqueueEmpty(empty);
-    }
-
     @MessageMapping("/update")
     public void updateLocation(@AuthenticationPrincipal User user, EmptyDTO.Request request) {
         try {
-            Empty empty = callService.updateEmptyLocationById(user.getId(), request.getLocation());
+            Taxi taxi = taxiService.loadByUserId(user.getId());
+            Empty empty = modelMapper.map(request, Empty.class);
             Call call = callService.tryReservation(empty);
             if (call != null) {
+                empty.setTaxi(taxi);
                 ReservationDTO reservation = modelMapper.map(reservationService.create(empty, call), ReservationDTO.class);
                 template.convertAndSendToUser(reservation.getUser().getUsername(), "/topic/reservation", reservation);
             }
+            template.convertAndSend("/topic/empty", modelMapper.map(empty, EmptyDTO.class));
         } catch (Exception e) {
             ErrorDTO error = new ErrorDTO(e.getMessage());
             template.convertAndSendToUser(user.getUsername(), "/topic/error", error);
