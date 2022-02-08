@@ -17,6 +17,8 @@ public class User implements UserDetails {
     private String taxiCertification;
     @OneToOne(mappedBy = "user")
     private Taxi taxi;
+    @OneToOne(mappedBy = "user")
+    private GetIn GetIn;
 
     public Long getId() {
         return id;

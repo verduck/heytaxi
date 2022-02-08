@@ -13,6 +13,9 @@ public class Taxi {
     private String name;
     private String carNumber;
 
+    @OneToOne(mappedBy = "taxi")
+    private GetIn getIn;
+
     public Taxi() {
         this(null, null, null);
     }
