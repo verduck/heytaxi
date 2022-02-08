@@ -5,6 +5,7 @@ import com.moca.heytaxi.domain.Taxi;
 import com.moca.heytaxi.domain.User;
 import com.moca.heytaxi.dto.TaxiDTO;
 import com.moca.heytaxi.service.TaxiService;
+import com.moca.heytaxi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,8 @@ public class TaxiControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private UserService userService;
+    @MockBean
     private TaxiService taxiService;
 
     @BeforeEach
@@ -82,6 +85,7 @@ public class TaxiControllerTest {
         taxi.setCarNumber("123가5678");
         taxi.setUser(user);
 
+        given(userService.loadUserById(any())).willReturn(user);
         given(taxiService.loadByUserId(any())).willReturn(taxi);
 
         this.mockMvc.perform(get("/api/taxi").header("Authorization", "Bearer " + TOKEN)).andExpect(status().isOk())
@@ -93,9 +97,11 @@ public class TaxiControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("taxi").description("택시 정보"),
+                                PayloadDocumentation.fieldWithPath("taxi.id").type(JsonFieldType.NUMBER).description("택시 고유번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
                                 PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver").type(JsonFieldType.OBJECT).description("택시 기사 정보"),
+                                PayloadDocumentation.fieldWithPath("taxi.driver.id").type(JsonFieldType.NUMBER).description("택시 기사 고유번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver.name").type(JsonFieldType.STRING).description("택시 기사 이름"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver.username").type(JsonFieldType.STRING).description("택시 기사 전화번호")
                                 )));
@@ -103,11 +109,19 @@ public class TaxiControllerTest {
 
     @Test
     public void registerMyTaxi() throws Exception {
+        final User user = new User();
+        user.setId(1L);
+        user.setName("홍길동");
+        user.setUsername("01012345678");
+
+        given(userService.loadUserById(any(Long.class))).willReturn(user);
+
         final Taxi taxi = new Taxi();
         taxi.setName("그랜저");
         taxi.setCarNumber("123가4567");
 
         given(taxiService.createTaxi(any(Taxi.class))).willReturn(taxi);
+
         TaxiDTO.Request request = modelMapper.map(taxi, TaxiDTO.Request.class);
 
         this.mockMvc.perform(post("/api/taxi")
@@ -127,8 +141,9 @@ public class TaxiControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("taxi").description("택시 정보"),
-                                PayloadDocumentation.fieldWithPath("taxi.name").description(JsonFieldType.STRING).description("택시 이름"),
-                                PayloadDocumentation.fieldWithPath("taxi.carNumber").description(JsonFieldType.STRING).description("택시 자동차번호"),
+                                PayloadDocumentation.fieldWithPath("taxi.id").type(JsonFieldType.NUMBER).description("택시 고유번호"),
+                                PayloadDocumentation.fieldWithPath("taxi.name").type(JsonFieldType.STRING).description("택시 이름"),
+                                PayloadDocumentation.fieldWithPath("taxi.carNumber").type(JsonFieldType.STRING).description("택시 자동차번호"),
                                 PayloadDocumentation.fieldWithPath("taxi.driver").description(JsonFieldType.OBJECT).description("택시 기사 정보")
                         )
                 ));
@@ -136,6 +151,13 @@ public class TaxiControllerTest {
 
     @Test
     public void deleteMyTaxi() throws Exception {
+        final User user = new User();
+        user.setId(1L);
+        user.setName("홍길동");
+        user.setUsername("01012345678");
+
+        given(userService.loadUserById(any(Long.class))).willReturn(user);
+
         this.mockMvc.perform(delete("/api/taxi").header("Authorization", "Bearer " + TOKEN)).andExpect(status().isOk())
                 .andDo(document.document(
                         requestHeaders(

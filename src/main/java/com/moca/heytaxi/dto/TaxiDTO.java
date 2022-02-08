@@ -1,19 +1,18 @@
 package com.moca.heytaxi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.moca.heytaxi.domain.User;
 
 public class TaxiDTO {
+    private Long id;
     @JsonProperty("driver")
     private UserDTO user;
     private String name;
     private String carNumber;
 
-    public TaxiDTO() {
-        this(null, null, null);
-    }
+    public TaxiDTO() {}
 
-    public TaxiDTO(UserDTO user, String name, String carNumber) {
+    public TaxiDTO(Long id, UserDTO user, String name, String carNumber) {
+        this.id = id;
         this.user = user;
         this.name = name;
         this.carNumber = carNumber;
@@ -41,6 +40,14 @@ public class TaxiDTO {
 
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public static final class Request {

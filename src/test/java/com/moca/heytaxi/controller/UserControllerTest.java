@@ -92,6 +92,7 @@ public class UserControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("user").type(JsonFieldType.OBJECT).description("사용자 정보"),
+                                PayloadDocumentation.fieldWithPath("user.id").type(JsonFieldType.NUMBER).description("사용자 고유번호"),
                                 PayloadDocumentation.fieldWithPath("user.name").type(JsonFieldType.STRING).description("사용자 이름"),
                                 PayloadDocumentation.fieldWithPath("user.username").type(JsonFieldType.STRING).description("사용자 전화번호"))));
     }
@@ -121,7 +122,7 @@ public class UserControllerTest {
                                 headerWithName("Authorization").description("Bearer auth credentials")
                         ),
                         PayloadDocumentation.requestFields(
-                               PayloadDocumentation.fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 고유 번호"),
+                               PayloadDocumentation.fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 고유번호"),
                                 PayloadDocumentation.fieldWithPath("username").type(JsonFieldType.STRING).description("사용자 전화번호"),
                                 PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름")
                         ),
@@ -129,6 +130,7 @@ public class UserControllerTest {
                                 PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("결과 설명"),
                                 PayloadDocumentation.fieldWithPath("user").type(JsonFieldType.OBJECT).description("사용자 정보"),
+                                PayloadDocumentation.fieldWithPath("user.id").type(JsonFieldType.NUMBER).description("사용자 고유번호"),
                                 PayloadDocumentation.fieldWithPath("user.name").type(JsonFieldType.STRING).description("사용자 이름"),
                                 PayloadDocumentation.fieldWithPath("user.username").type(JsonFieldType.STRING).description("사용자 전화번호"))));
     }
