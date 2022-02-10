@@ -20,23 +20,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-
-        return optionalUser.get();
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다. username: " + username));
     }
 
     public User loadUserById(Long id) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with id: " + id);
-        }
-
-        return optionalUser.get();
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다. id: " + id));
     }
 
     public User createUser(User user) {
