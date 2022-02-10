@@ -19,6 +19,8 @@ public class User implements UserDetails {
     private Taxi taxi;
     @OneToOne(mappedBy = "user")
     private GetIn GetIn;
+    @OneToOne(mappedBy = "user")
+    private GetOut getOut;
 
     public Long getId() {
         return id;

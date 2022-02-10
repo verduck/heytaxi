@@ -16,6 +16,9 @@ public class Taxi {
     @OneToOne(mappedBy = "taxi")
     private GetIn getIn;
 
+    @OneToOne(mappedBy = "taxi")
+    private GetOut getOut;
+
     public Taxi() {
         this(null, null, null);
     }
