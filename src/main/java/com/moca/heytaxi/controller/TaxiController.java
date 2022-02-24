@@ -28,6 +28,7 @@ public class TaxiController {
         TaxiDTO.Response response = new TaxiDTO.Response();
         try {
             Taxi taxi = taxiService.loadByUserId(user.getId());
+            response.setSuccess(true);
             response.setMessage("택시 정보를 성공적으로 불러왔습니다.");
             response.setTaxi(modelMapper.map(taxi, TaxiDTO.class));
         } catch (Exception e) {
