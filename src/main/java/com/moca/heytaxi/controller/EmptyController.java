@@ -8,8 +8,15 @@ import com.moca.heytaxi.service.TaxiService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -32,7 +39,9 @@ public class EmptyController {
     }
 
     @MessageMapping("/empty/update")
-    public void updateLocation(@AuthenticationPrincipal User user, EmptyDTO.Request request) {
+    public void updateLocation(@Payload EmptyDTO.Request request, StompHeaderAccessor headerAccessor) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+        User user = (User) usernamePasswordAuthenticationToken.getPrincipal();
         try {
             Taxi taxi = taxiService.loadByUserId(user.getId());
             Empty empty = modelMapper.map(request, Empty.class);
