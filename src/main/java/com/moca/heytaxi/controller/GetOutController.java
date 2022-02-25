@@ -7,8 +7,10 @@ import com.moca.heytaxi.service.GetOutService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -25,7 +27,10 @@ public class GetOutController {
     }
 
     @MessageMapping("/get-out")
-    public void getOut(@AuthenticationPrincipal User user, GetOutDTO request) {
+    public void getOut(@Payload GetOutDTO request, StompHeaderAccessor headerAccessor) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+        User user = (User) usernamePasswordAuthenticationToken.getPrincipal();
+
         GetOutDTO.Response response = new GetOutDTO.Response();
         GetOut getOut = modelMapper.map(request, GetOut.class);
         getOut = getOutService.createGetOut(getOut);

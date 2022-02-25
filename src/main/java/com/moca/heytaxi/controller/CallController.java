@@ -8,8 +8,10 @@ import com.moca.heytaxi.service.CallService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -28,7 +30,10 @@ public class CallController {
     }
 
     @MessageMapping("/call/request")
-    public void request(@AuthenticationPrincipal User user, CallDTO request) {
+    public void request(@Payload CallDTO request, StompHeaderAccessor headerAccessor) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+        User user = (User) usernamePasswordAuthenticationToken.getPrincipal();
+
         Call call = modelMapper.map(request, Call.class);
         call.setId(user.getId());
         call.setTimestamp(LocalDateTime.now());
@@ -36,7 +41,10 @@ public class CallController {
     }
 
     @MessageMapping("/call/cancel")
-    public void cancel(@AuthenticationPrincipal User user) {
+    public void cancel(StompHeaderAccessor headerAccessor) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+        User user = (User) usernamePasswordAuthenticationToken.getPrincipal();
+
         try {
             Call call = callService.loadCallById(user.getId());
             callService.dequeueCall(call);

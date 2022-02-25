@@ -7,8 +7,10 @@ import com.moca.heytaxi.service.GetInService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -25,7 +27,10 @@ public class GetInController {
     }
 
     @MessageMapping("/get-in")
-    public void getIn(@AuthenticationPrincipal User user, GetInDTO request) {
+    public void getIn(@Payload GetInDTO request, StompHeaderAccessor headerAccessor) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+        User user = (User) usernamePasswordAuthenticationToken.getPrincipal();
+
         GetInDTO.Response response = new GetInDTO.Response();
         GetIn getIn = modelMapper.map(request, GetIn.class);
         getIn = getInService.createGetIn(getIn);
