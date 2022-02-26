@@ -3,6 +3,7 @@ package com.moca.heytaxi.domain;
 import javax.persistence.*;
 
 @Entity
+@Table(name="taxi", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id"})})
 public class Taxi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
