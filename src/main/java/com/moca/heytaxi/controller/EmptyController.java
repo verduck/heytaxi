@@ -45,9 +45,9 @@ public class EmptyController {
         try {
             Taxi taxi = taxiService.loadByUserId(user.getId());
             Empty empty = modelMapper.map(request, Empty.class);
+            empty.setTaxi(taxi);
             Call call = callService.tryReservation(empty);
             if (call != null) {
-                empty.setTaxi(taxi);
                 ReservationDTO reservation = modelMapper.map(reservationService.create(empty, call), ReservationDTO.class);
                 template.convertAndSendToUser(reservation.getUser().getUsername(), "/topic/reservation", reservation);
             }
