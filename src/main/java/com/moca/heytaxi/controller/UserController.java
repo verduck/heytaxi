@@ -33,8 +33,6 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDTO.Response> putMe(@AuthenticationPrincipal User user, @RequestBody UserDTO.Request request) {
         UserDTO.Response response = new UserDTO.Response();
-        System.out.println(request.getUsername());
-        System.out.println(request.getName());
         if (request.getUsername() != null) {
             user.setUsername(request.getUsername());
         }
