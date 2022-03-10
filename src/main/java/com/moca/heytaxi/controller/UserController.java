@@ -33,9 +33,15 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDTO.Response> putMe(@AuthenticationPrincipal User user, @RequestBody UserDTO.Request request) {
         UserDTO.Response response = new UserDTO.Response();
-        User u = modelMapper.map(request, User.class);
-        u.setId(user.getId());
-        user = userService.updateUser(u);
+        System.out.println(request.getUsername());
+        System.out.println(request.getName());
+        if (request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+        if (request.getName() != null) {
+            user.setName((request.getName()));
+        }
+        user = userService.updateUser(user);
         response.setSuccess(true);
         response.setMessage("사용자 정보를 성공적으로 변경하였습니다.");
         response.setUser(modelMapper.map(user, UserDTO.class));
