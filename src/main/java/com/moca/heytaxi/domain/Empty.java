@@ -12,14 +12,12 @@ public class Empty implements Comparable<Empty> {
     private Long id;
     private Taxi taxi;
     private LatLng location;
-    private LocalDateTime timestamp;
 
     public Empty() {}
 
-    public Empty(Taxi taxi, LatLng location, LocalDateTime timestamp) {
+    public Empty(Taxi taxi, LatLng location) {
         this.taxi = taxi;
         this.location = location;
-        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -38,17 +36,9 @@ public class Empty implements Comparable<Empty> {
         this.location = location;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
     @Override
     public int compareTo(Empty o) {
-        return timestamp.compareTo(o.timestamp);
+        return id.compareTo(o.id);
     }
 
     public Taxi getTaxi() {

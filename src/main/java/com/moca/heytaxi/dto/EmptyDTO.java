@@ -5,14 +5,12 @@ import java.time.LocalDateTime;
 public class EmptyDTO {
     private TaxiDTO taxi;
     private LatLng location;
-    private LocalDateTime timestamp;
 
     public EmptyDTO() {}
 
-    public EmptyDTO(TaxiDTO taxi, LatLng location, LocalDateTime timestamp) {
+    public EmptyDTO(TaxiDTO taxi, LatLng location) {
         this.taxi = taxi;
         this.location = location;
-        this.timestamp = timestamp;
     }
 
     public TaxiDTO getTaxi() {
@@ -31,25 +29,14 @@ public class EmptyDTO {
         this.location = location;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public static class Request {
         private LatLng location;
-        private LocalDateTime timestamp;
 
         public Request() {}
 
         public Request(LatLng location, LocalDateTime timestamp) {
             this.location = location;
-            this.timestamp = timestamp;
         }
-
 
         public LatLng getLocation() {
             return location;
@@ -57,14 +44,6 @@ public class EmptyDTO {
 
         public void setLocation(LatLng location) {
             this.location = location;
-        }
-
-        public LocalDateTime getTimestamp() {
-            return timestamp;
-        }
-
-        public void setTimestamp(LocalDateTime timestamp) {
-            this.timestamp = timestamp;
         }
     }
 
