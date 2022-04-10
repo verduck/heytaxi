@@ -3,12 +3,12 @@ package com.moca.heytaxi.domain;
 public class Reservation {
     private Long id;
     private User user;
-    private Taxi taxi;
+    private Empty taxi;
     private Call call;
 
     public Reservation() {}
 
-    public Reservation(User user, Taxi taxi, Call call) {
+    public Reservation(User user, Empty taxi, Call call) {
         this.user = user;
         this.taxi = taxi;
         this.call = call;
@@ -22,11 +22,11 @@ public class Reservation {
         this.user = user;
     }
 
-    public Taxi getTaxi() {
+    public Empty getTaxi() {
         return taxi;
     }
 
-    public void setTaxi(Taxi taxi) {
+    public void setTaxi(Empty taxi) {
         this.taxi = taxi;
     }
 
