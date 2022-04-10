@@ -25,7 +25,7 @@ public class ReservationService {
     public Reservation create(Empty empty, Call call) throws Exception {
         Reservation reservation = new Reservation();
         reservation.setUser(userRepository.findById(call.getId()).orElseThrow(() -> new Exception("사용자를 찾을 수 없습니다.")));
-        reservation.setTaxi(taxiRepository.findById(empty.getId()).orElseThrow(() -> new Exception("택시를 찾을 수 없습니다.")));
+        reservation.setTaxi(empty);
         reservation.setCall(call);
         callRedisRepository.deleteById(call.getId());
         return reservation;
