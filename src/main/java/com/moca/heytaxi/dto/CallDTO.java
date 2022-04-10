@@ -2,13 +2,26 @@ package com.moca.heytaxi.dto;
 
 public class CallDTO {
     private LatLng src;
-    private LatLng dest;
+    private LatLng dst;
 
     public CallDTO() {}
 
-    public CallDTO(LatLng src, LatLng dest) {
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getClass().getName());
+        stringBuilder.append('@');
+        stringBuilder.append(hashCode());
+        stringBuilder.append("(");
+        stringBuilder.append("src = " + src.toString());
+        stringBuilder.append(", dst = " + dst.toString());
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    public CallDTO(LatLng src, LatLng dst) {
         this.src = src;
-        this.dest = dest;
+        this.dst = dst;
     }
 
     public LatLng getSrc() {
@@ -19,12 +32,12 @@ public class CallDTO {
         this.src = src;
     }
 
-    public LatLng getDest() {
-        return dest;
+    public LatLng getDst() {
+        return dst;
     }
 
-    public void setDest(LatLng dest) {
-        this.dest = dest;
+    public void setDst(LatLng dst) {
+        this.dst = dst;
     }
 
     public static class Request {
