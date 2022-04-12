@@ -12,6 +12,8 @@ public class Taxi {
     @JoinColumn(name = "user_id")
     private User user;
     private String name;
+
+    @Column(unique = true)
     private String carNumber;
 
     @OneToOne(mappedBy = "taxi")
