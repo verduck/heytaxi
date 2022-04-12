@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TaxiRepository extends JpaRepository<Taxi, Long> {
     Optional<Taxi> findByUserId(Long userId);
+    Optional<Taxi> findByCarNumber(String carNumber);
     void deleteByUserId(Long userId);
 }
