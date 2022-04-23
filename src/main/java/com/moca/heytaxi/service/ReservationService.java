@@ -33,6 +33,7 @@ public class ReservationService {
 
     public void reject(Reservation reservation) {
         Call call = reservation.getCall();
+        call.setId(reservation.getUser().getId());
         callRedisRepository.save(call);
     }
 }
