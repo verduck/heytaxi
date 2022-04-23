@@ -39,12 +39,12 @@ public class VerifyService {
 
     public VerifyDTO.Response request(VerifyDTO.Request request) {
         VerifyDTO.Response response = new VerifyDTO.Response();
-/*        try {
+        try {
             PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
             Phonenumber.PhoneNumber koreaNumberProto = phoneUtil.parse(request.getPhone(), "KR");
             String phone = phoneUtil.format(koreaNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
             Verification verification = Verification.creator(twilioProperties.getVerificationServiceSID(), phone, "sms")
-                .setAppHash(twilioProperties.getAppHash())
+/*                .setAppHash(twilioProperties.getAppHash())*/
                     .setLocale("ko")
                     .create();
             response.setSuccess(true);
@@ -53,9 +53,7 @@ public class VerifyService {
             response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
             response.setMessage(e.getMessage());
-        }*/
-        response.setSuccess(true);
-        response.setMessage("pending");
+        }
         return response;
     }
 
@@ -65,7 +63,7 @@ public class VerifyService {
             PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
             Phonenumber.PhoneNumber koreaNumberProto = phoneUtil.parse(request.getPhone(), "KR");
             String phone = phoneUtil.format(koreaNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
-            /*VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
+            VerificationCheck verificationCheck = VerificationCheck.creator(twilioProperties.getVerificationServiceSID(), request.getCode())
                     .setTo(phone)
                     .create();
             if (verificationCheck.getStatus().equals("approved")) {
@@ -74,14 +72,12 @@ public class VerifyService {
             } else {
                 response.setSuccess(false);
                 response.setMessage("인증번호가 일치하지 않습니다.");
-            }*/
+            }
         } catch (NumberParseException e) {
             response.setMessage("잘못된 전화번호 형식입니다.");
         } catch (TwilioException e) {
             response.setMessage(e.getMessage());
         }
-        response.setSuccess(true);
-
         if (response.isSuccess()) {
             User user;
             try {
